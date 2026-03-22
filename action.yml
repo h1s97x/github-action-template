@@ -1,0 +1,20 @@
+name: 'GitHub Action Template'
+description: 'A template for building GitHub Actions with TypeScript'
+author: 'h1s97x'
+branding:
+  icon: 'terminal'
+  color: 'blue'
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+  debug:
+    description: 'Enable debug mode'
+    required: false
+    default: 'false'
+outputs:
+  result:
+    description: 'The result of the action'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
