@@ -1,0 +1,43 @@
+name: Debug Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run Action
+        uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          debug: ${{ inputs.debug || 'false' }}
+
+      - name: Print debug info
+        if: inputs.debug == 'true'
+        run: |
+          echo "=== Environment ==="
+          echo "GitHub Ref: ${{ github.ref }}"
+          echo "GitHub Event: ${{ github.event_name }}"
+          echo "Runner Temp: ${{ runner.temp }}"
+          echo "=== Action Info ==="
+          cat action.yml
